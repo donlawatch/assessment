@@ -2,9 +2,12 @@ package com.kbtg.bootcamp.posttest.services;
 
 import com.kbtg.bootcamp.posttest.dtos.requests.LotteryRequest;
 import com.kbtg.bootcamp.posttest.dtos.responses.LotteryResponse;
+import com.kbtg.bootcamp.posttest.dtos.responses.PurchaseTicketResponse;
 import com.kbtg.bootcamp.posttest.models.Lottery;
+import com.kbtg.bootcamp.posttest.models.UserTicket;
 import com.kbtg.bootcamp.posttest.repositories.LotteryRepository;
 
+import com.kbtg.bootcamp.posttest.repositories.UserTicketRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +16,11 @@ import java.util.Optional;
 @Service
 public class LotteryService {
     private final LotteryRepository lotteryRepository;
+    private final UserTicketRepository userTicketRepository;
 
-    public LotteryService(LotteryRepository lotteryRepository) {
+    public LotteryService(LotteryRepository lotteryRepository, UserTicketRepository userTicketRepository) {
         this.lotteryRepository = lotteryRepository;
+        this.userTicketRepository = userTicketRepository;
     }
 
     public LotteryResponse addTicket(LotteryRequest lotteryRequest) {
@@ -54,5 +59,19 @@ public class LotteryService {
 
         response.setTickets(tickets);
         return response;
+    }
+
+    //TODO: Add validation
+    public PurchaseTicketResponse purchaseTicket(String userId, String ticket) {
+        Optional<Lottery> optionalLottery = lotteryRepository.findByTicket(ticket);
+        Lottery lottery = optionalLottery.get();
+
+        UserTicket userTicket = new UserTicket();
+        userTicket.setUserId(userId);
+        userTicket.setLottery(lottery);
+
+        userTicketRepository.save(userTicket);
+        String id = String.valueOf(userTicket.getId());
+        return new PurchaseTicketResponse(id);
     }
 }

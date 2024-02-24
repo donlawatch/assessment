@@ -11,6 +11,9 @@ CREATE TABLE lottery
 
 CREATE TABLE user_ticket
 (
-    userID varchar(10) not null
+    id BIGSERIAL PRIMARY KEY,
+    user_id varchar(10) not null,
+    ticket_id BIGSERIAL not null ,
+    FOREIGN KEY(ticket_id) references lottery(ticket_id)
 );
 

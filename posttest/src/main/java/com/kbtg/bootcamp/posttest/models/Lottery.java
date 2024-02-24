@@ -1,10 +1,11 @@
 package com.kbtg.bootcamp.posttest.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-
+@Data
 @Entity
 @Table(name = "lottery")
 public class Lottery {
@@ -12,17 +13,9 @@ public class Lottery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ticketId;
 
-    @Getter
-    @Setter
     @Column(length = 6)
     private String ticket;
-
-    @Getter
-    @Setter
     private Double price;
-
-    @Getter
-    @Setter
     private int amount;
 
 }

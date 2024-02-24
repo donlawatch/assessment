@@ -1,14 +1,22 @@
 package com.kbtg.bootcamp.posttest.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "user_ticket")
 public class UserTicket {
-    @Id
-    private String userID;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "user_id")
+    private String userId;
+
+    @JoinColumn(name ="ticket_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Lottery lottery;
 
 }

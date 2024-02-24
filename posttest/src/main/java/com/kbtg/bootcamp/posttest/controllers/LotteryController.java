@@ -4,6 +4,7 @@ import com.kbtg.bootcamp.posttest.dtos.requests.LotteryRequest;
 import com.kbtg.bootcamp.posttest.dtos.responses.LotteryResponse;
 import com.kbtg.bootcamp.posttest.services.LotteryService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ public class LotteryController {
         this.lotteryService = lotteryService;
     }
 
-    //TODO: Add basic authentication to addTicket
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/lotteries")
     public LotteryResponse addTicket(@Valid @RequestBody LotteryRequest lotteryRequest) {
         return lotteryService.addTicket(lotteryRequest);

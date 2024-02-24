@@ -11,21 +11,21 @@ import java.util.List;
 public class ErrorMessage {
     private final int statusCode;
     private final LocalDate timestamp;
-    private String message;
-    private List<String> messages;
+    private String error;
+    private List<String> errors;
     private final String description;
 
-    public ErrorMessage(int statusCode, LocalDate timestamp, String message, String description) {
+    public ErrorMessage(int statusCode, LocalDate timestamp, String error, String description) {
         this.statusCode = statusCode;
         this.timestamp = timestamp;
-        this.message = message;
+        this.error = error;
         this.description = description;
     }
 
-    public ErrorMessage(int statusCode, LocalDate timestamp, List<String> messages, String description) {
+    public ErrorMessage(int statusCode, LocalDate timestamp, List<String> errors, String description) {
         this.statusCode = statusCode;
         this.timestamp = timestamp;
-        this.messages = messages;
+        this.errors = errors;
         this.description = description;
     }
 

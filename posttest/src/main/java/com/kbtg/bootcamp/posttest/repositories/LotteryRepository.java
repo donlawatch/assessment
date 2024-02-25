@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LotteryRepository extends JpaRepository<Lottery, Long> {
-    Optional<Lottery> findByTicket(String ticket);
-
+public interface LotteryRepository extends JpaRepository<Lottery, String> {
     @Query(value = "select l.ticket  from Lottery l")
     List<String> findAllTickets();
 }

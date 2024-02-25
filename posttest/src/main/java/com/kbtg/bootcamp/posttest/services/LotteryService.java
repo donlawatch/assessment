@@ -3,6 +3,7 @@ package com.kbtg.bootcamp.posttest.services;
 import com.kbtg.bootcamp.posttest.dtos.requests.LotteryRequest;
 import com.kbtg.bootcamp.posttest.dtos.responses.LotteryResponse;
 import com.kbtg.bootcamp.posttest.dtos.responses.PurchaseTicketResponse;
+import com.kbtg.bootcamp.posttest.exceptions.NotFoundException;
 import com.kbtg.bootcamp.posttest.models.Lottery;
 import com.kbtg.bootcamp.posttest.models.UserTicket;
 import com.kbtg.bootcamp.posttest.repositories.LotteryRepository;
@@ -24,7 +25,7 @@ public class LotteryService {
     }
 
     public LotteryResponse addTicket(LotteryRequest lotteryRequest) {
-        Optional<Lottery> optionalLottery = lotteryRepository.findByTicket(lotteryRequest.getTicket());
+        Optional<Lottery> optionalLottery = lotteryRepository.findById(lotteryRequest.getTicket());
         LotteryResponse response = new LotteryResponse();
 
         //If the ticket already exists, then update the existing one.
@@ -61,12 +62,16 @@ public class LotteryService {
         return response;
     }
 
-    //TODO: Add validation
     public PurchaseTicketResponse purchaseTicket(String userId, String ticket) {
-        Optional<Lottery> optionalLottery = lotteryRepository.findByTicket(ticket);
-        Lottery lottery = optionalLottery.get();
+        Optional<Lottery> optionalLottery = lotteryRepository.findById(ticket);
 
+        if (optionalLottery.isEmpty()) {
+            throw  new NotFoundException("Ticket not found!");
+        }
+
+        Lottery lottery = optionalLottery.get();
         UserTicket userTicket = new UserTicket();
+
         userTicket.setUserId(userId);
         userTicket.setLottery(lottery);
 

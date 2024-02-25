@@ -22,7 +22,7 @@ public class LotteryController {
     @GetMapping("/lotteries")
     public LotteryResponse getTickets() {
         return lotteryService.getTickets();
-    };
+    }
 
     @GetMapping("/users/{userId}/lotteries")
     public PurchaseListResponse getPurchaseList(
@@ -52,6 +52,6 @@ public class LotteryController {
             @PathVariable("ticketId") @Pattern(regexp = "^\\d{6}$", message = "Ticket ID must be 6 digits number") String ticketId
     ) {
        return lotteryService.sellBackTicket(userId, ticketId);
-    };
+    }
 }
 

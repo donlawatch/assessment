@@ -15,7 +15,7 @@ public class UserTicket {
     @Column(name = "user_id")
     private String userId;
 
-    @JoinColumn(name ="ticket")
+    @JoinColumn(name ="ticket", referencedColumnName = "ticket")
     @ManyToOne(fetch = FetchType.LAZY)
     private Lottery lottery;
 

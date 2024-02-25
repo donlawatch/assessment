@@ -33,9 +33,18 @@ public class LotteryController {
     @PostMapping("/users/{userId}/lotteries/{ticketId}")
     public PurchaseTicketResponse purchaseTicket(
             @PathVariable("userId") @Pattern(regexp = "^\\d{10}$", message = "User ID must be 10 digits number") String userId,
-            @PathVariable("ticketId") @Pattern(regexp = "^\\d{6}$", message = "Ticket ID must be 6 digits number") String ticketId) {
+            @PathVariable("ticketId") @Pattern(regexp = "^\\d{6}$", message = "Ticket ID must be 6 digits number") String ticketId
+    ) {
         return lotteryService.purchaseTicket(userId, ticketId);
     }
+
+    @DeleteMapping("/users/{userId}/lotteries/{ticketId}")
+    public LotteryResponse sellBackTicket(
+            @PathVariable("userId") @Pattern(regexp = "^\\d{10}$", message = "User ID must be 10 digits number") String userId,
+            @PathVariable("ticketId") @Pattern(regexp = "^\\d{6}$", message = "Ticket ID must be 6 digits number") String ticketId
+    ) {
+       return lotteryService.sellBackTicket(userId, ticketId);
+    };
 
 
 }

@@ -79,4 +79,16 @@ public class LotteryService {
         String id = String.valueOf(userTicket.getId());
         return new PurchaseTicketResponse(id);
     }
+
+    public LotteryResponse sellBackTicket(String userId, String ticket) {
+        int deletedRows = userTicketRepository.deleteByUserIdAndTicketId(userId, ticket);
+        LotteryResponse response = new LotteryResponse();
+
+        if (deletedRows == 0) {
+            throw new NotFoundException(String.format("user ID: %s with ticket ID: %s is not existed", userId, ticket));
+        }
+
+        response.setTicket(ticket);
+        return response;
+    };
 }

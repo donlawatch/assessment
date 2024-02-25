@@ -2,6 +2,7 @@ package com.kbtg.bootcamp.posttest.services;
 
 import com.kbtg.bootcamp.posttest.dtos.requests.LotteryRequest;
 import com.kbtg.bootcamp.posttest.dtos.responses.LotteryResponse;
+import com.kbtg.bootcamp.posttest.dtos.responses.PurchaseListResponse;
 import com.kbtg.bootcamp.posttest.dtos.responses.PurchaseTicketResponse;
 import com.kbtg.bootcamp.posttest.exceptions.NotFoundException;
 import com.kbtg.bootcamp.posttest.models.Lottery;
@@ -11,6 +12,7 @@ import com.kbtg.bootcamp.posttest.repositories.LotteryRepository;
 import com.kbtg.bootcamp.posttest.repositories.UserTicketRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,5 +92,26 @@ public class LotteryService {
 
         response.setTicket(ticket);
         return response;
-    };
+    }
+
+    public PurchaseListResponse getPurchaseList(String userId) {
+        List<UserTicket> purchaseList = userTicketRepository.findAllByUserId(userId);
+
+        if (purchaseList.isEmpty()) {
+            throw new NotFoundException("Purchase list not found.");
+        }
+
+        double price = 0;
+        int amount = purchaseList.size();
+        List<String> tickets = new ArrayList<>();
+
+        for (UserTicket userTicket : purchaseList) {
+            Lottery lottery = userTicket.getLottery();
+
+            tickets.add(lottery.getTicket());
+            price += lottery.getPrice();
+        }
+
+        return new PurchaseListResponse(tickets, amount, price);
+    }
 }

@@ -2,6 +2,7 @@ package com.kbtg.bootcamp.posttest.controllers;
 
 import com.kbtg.bootcamp.posttest.dtos.requests.LotteryRequest;
 import com.kbtg.bootcamp.posttest.dtos.responses.LotteryResponse;
+import com.kbtg.bootcamp.posttest.dtos.responses.PurchaseListResponse;
 import com.kbtg.bootcamp.posttest.dtos.responses.PurchaseTicketResponse;
 import com.kbtg.bootcamp.posttest.services.LotteryService;
 import jakarta.validation.Valid;
@@ -18,6 +19,17 @@ public class LotteryController {
     public LotteryController(LotteryService lotteryService) {
         this.lotteryService = lotteryService;
     }
+    @GetMapping("/lotteries")
+    public LotteryResponse getTickets() {
+        return lotteryService.getTickets();
+    };
+
+    @GetMapping("/users/{userId}/lotteries")
+    public PurchaseListResponse getPurchaseList(
+            @PathVariable("userId") @Pattern(regexp = "^\\d{10}$", message = "User ID must be 10 digits number") String userId
+    ) {
+        return lotteryService.getPurchaseList(userId);
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/lotteries")
@@ -25,10 +37,6 @@ public class LotteryController {
         return lotteryService.addTicket(lotteryRequest);
     }
 
-    @GetMapping("/lotteries")
-    public LotteryResponse getTickets() {
-        return lotteryService.getTickets();
-    };
 
     @PostMapping("/users/{userId}/lotteries/{ticketId}")
     public PurchaseTicketResponse purchaseTicket(
@@ -45,7 +53,5 @@ public class LotteryController {
     ) {
        return lotteryService.sellBackTicket(userId, ticketId);
     };
-
-
 }
 

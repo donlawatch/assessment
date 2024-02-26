@@ -9,11 +9,18 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-@Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LotteryResponse {
     private String ticket;
     private List<String> tickets;
+
+    public LotteryResponse(String ticket) {
+        this.ticket = ticket;
+    }
+
+    public LotteryResponse(List<String> tickets) {
+        this.tickets = tickets;
+    }
 }
 
 

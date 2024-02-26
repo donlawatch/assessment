@@ -28,7 +28,7 @@ public class LotteryService {
 
     public LotteryResponse addTicket(LotteryRequest lotteryRequest) {
         Optional<Lottery> optionalLottery = lotteryRepository.findById(lotteryRequest.getTicket());
-        LotteryResponse response = new LotteryResponse();
+
 
         //If the ticket already exists, then update the existing one.
         if(optionalLottery.isPresent()) {
@@ -39,8 +39,7 @@ public class LotteryService {
            lottery.setAmount(newAmount);
            lotteryRepository.save(lottery);
 
-           response.setTicket(lottery.getTicket());
-           return response;
+           return new LotteryResponse(lottery.getTicket());
         }
 
         //Add a new ticket
@@ -52,16 +51,13 @@ public class LotteryService {
 
         lotteryRepository.save(newLottery);
 
-        response.setTicket(newLottery.getTicket());
-        return response;
+        return new LotteryResponse(newLottery.getTicket());
     }
 
     public LotteryResponse getTickets() {
         List<String> tickets = lotteryRepository.findAllTickets();
-        LotteryResponse response = new LotteryResponse();
 
-        response.setTickets(tickets);
-        return response;
+        return new LotteryResponse(tickets);
     }
 
     public PurchaseTicketResponse purchaseTicket(String userId, String ticket) {
@@ -84,14 +80,12 @@ public class LotteryService {
 
     public LotteryResponse sellBackTicket(String userId, String ticket) {
         int deletedRows = userTicketRepository.deleteByUserIdAndTicketId(userId, ticket);
-        LotteryResponse response = new LotteryResponse();
 
         if (deletedRows == 0) {
             throw new NotFoundException(String.format("user ID: %s with ticket ID: %s is not existed", userId, ticket));
         }
 
-        response.setTicket(ticket);
-        return response;
+        return new LotteryResponse(ticket);
     }
 
     public PurchaseListResponse getPurchaseList(String userId) {

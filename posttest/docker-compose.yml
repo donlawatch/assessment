@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: posttest-db
+    image: postgres:16.2
+    environment:
+      POSTGRES_DB: lottery_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    restart: on-failure
+    volumes:
+      - ./db-init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - posttest-network
+    ports:
+      - "5432:5432"
+  app:
+    container_name: posttest-app
+    image: posttest-springboot-app:latest
+    environment:
+      - DATABASE_URL=jdbc:postgresql://db:5432/lottery_db
+    build:
+      context: .
+    depends_on:
+      - db
+    networks:
+      - posttest-network
+    ports:
+      - "8888:8888"
+
+networks:
+  posttest-network:
